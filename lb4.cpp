@@ -43,7 +43,7 @@ int main(){
         if (str1[i] != '*'){
             str1p[i1] = str1[i];
             i1++;
-        } 
+        }
     }
 
     cout << str1p << endl;

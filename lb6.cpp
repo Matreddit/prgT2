@@ -60,7 +60,7 @@ void findArmsts(int n = 1, int k = 9999){
 
 int main(){
 
-    findArmsts(1, 99999999);
+    findArmsts(1, 99999);
 
 
     return 0;
