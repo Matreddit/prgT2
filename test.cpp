@@ -63,7 +63,7 @@ int main() {
         {3, 5, 6, 1, 4},
         {1, 3, 5, 7, 6}
     };
-    cout << "Було"<< endl;
+    cout << "before"<< endl;
     for(int i = 0; i < 3; i++){
         for(int j = 0; j < 5; j++){
             cout << matrix[i][j] << " ";
@@ -89,7 +89,7 @@ int main() {
         delete[] arr0;
     }
 
-    cout << "Стало"<< endl;
+    cout << "after"<< endl;
 
     for(int i = 0; i < 3; i++){
         for(int j = 0; j < 5; j++){
