@@ -13,6 +13,12 @@ using namespace std;
 void bubbleSort12(int *arr, int size);
 void bubbleSort21(int *arr, int size);
 
+void insertSort12(int *arr, int size);
+void insertSort21(int *arr, int size);
+
+void shellSort12(int *arr, int size);
+
+
 int main(){
     srand(time(NULL));
 
@@ -31,8 +37,9 @@ int main(){
     
 
 
-    bubbleSort21(arr, N);
-
+    //bubbleSort21(arr, N);
+    //insertSort21(arr, N);
+    shellSort12(arr, N);
 
 
 
@@ -75,3 +82,39 @@ void bubbleSort21(int *arr, int size){
         }
     }
 }
+
+void insertSort12(int *arr, int size){
+    for(int i = 1; i < size; i++){
+        int key = arr[i], j = i - 1;
+        for(; j >= 0 && arr[j] > key; j--){
+            arr[j + 1] = arr[j];
+        }
+        arr[j+1] = key;
+    }
+}
+
+void insertSort21(int *arr, int size){
+    for(int i = 1; i < size; i++){
+        int key = arr[i], j = i - 1;
+        for(; j >= 0 && arr[j] < key; j--){
+            arr[j + 1] = arr[j];
+        }
+        arr[j+1] = key;
+    }
+}
+
+void shellSort12(int *arr, int size){
+    // Початкова відстань (gap)
+    for (int gap = size / 2; gap > 0; gap /= 2) {
+        // Виконуємо сортування методом вставок для кожного підмасиву з елементами, розташованими через gap
+        for (int i = gap; i < size; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
