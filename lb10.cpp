@@ -49,7 +49,21 @@ void printList(List * Head){
 
 // 5.a
 bool doesSorted12(List*head){
-
+    if (!head) return 0;
+    int next;
+    List *p = head;
+    while (head){
+        if(head->link){
+            p = head->link;
+            next = p->inf;
+            if (head->inf > next){
+                return 0;
+            }
+        }
+        head = head->link;
+    }
+    return 1;
+    
 }
 
 int main(){
@@ -59,7 +73,12 @@ int main(){
     for(int i = 0; i < 50; i++){
         addToEnd(Head, i);
     }
+    addToEnd(Head, 333);
     
+    List *p = Head->link;
+    p = p->link;
+    p = p->link;
+    p->inf = 997;
 
     printList(Head);
 
