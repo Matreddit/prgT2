@@ -46,9 +46,33 @@ void printList(List * Head){
     cout << endl;
 }
 
+void addInPos(List *& Head, int pos, int inf){
+    List *p = new List;
+    if(pos == 0){
+        p->inf = inf;
+        p->link = Head;
+        Head = p;
+    } else if(pos == 1){
+        p->inf = inf;
+        p->link = Head->link;
+        Head->link = p;
+    } else{
+        p->inf = inf;
+        List *p0 = Head;
+        for(int i = 0; i < pos -1 && p0; i++){
+            p0 = p0->link;
+        }
+        if(p0){
+            p->link = p0->link;
+            p0->link = p;
+        } else
+            cout << "pos error! p0==NULL!\n";
+    }
+}
+
 
 // 5.a
-bool doesSorted12(List*head){
+bool isSorted12(List*head){
     if (!head) return 0;
     int next;
     List *p = head;
@@ -74,29 +98,44 @@ void addAsSecond(List *& Head, int inf){
 
 }
 
+// 5->v   вставляє новий елемент Е1 за кожним входженням елемента Е
+void addE1afterE(List *& Head, int E1, int E){
+    for(List *pi = Head; pi; pi = pi->link){
+        if (pi->inf == E){
+            List *p = new List;
+            p->inf = E1;
+            p->link = pi->link;
+            pi->link = p;
+        }
+    }
+
+
+}
+
 int main(){
 
     List *Head = NULL; // створили поводок щоб не загубить список
 
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < 13; i++){
         addToEnd(Head, i);
     }
-    addToEnd(Head, 333);
     
-    List *p = Head->link;
-    p = p->link;
-    p = p->link;
-    p->inf = 997;
-
+    // addInPos(Head, 4, 11);
     printList(Head);
+    cout << "is sorted by growth?\n";
+    if (isSorted12(Head)) cout << "yes\n\n";
+    else cout << "no\n\n";
 
-    cout << "\n";
-    if(doesSorted12(Head)) cout << "true\n";
-    else cout << "false\n";
+    addAsSecond(Head, 11);
+    printList(Head); cout << endl;
 
-    // b
-    addAsSecond(Head, 18);
-    printList(Head);
+    addE1afterE(Head, 66, 11);
+    printList(Head); cout << endl;
+
+    
+    
+
+
 
     
     // deletin
