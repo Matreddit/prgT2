@@ -63,7 +63,15 @@ bool doesSorted12(List*head){
         head = head->link;
     }
     return 1;
-    
+}
+
+// 5.b
+void addAsSecond(List *& Head, int inf){
+    List *p = new List;
+    p->inf = inf;
+    p->link = Head->link;
+    Head->link = p;
+
 }
 
 int main(){
@@ -82,10 +90,13 @@ int main(){
 
     printList(Head);
 
-    cout << "\n\n\n";
+    cout << "\n";
     if(doesSorted12(Head)) cout << "true\n";
     else cout << "false\n";
 
+    // b
+    addAsSecond(Head, 18);
+    printList(Head);
 
     
     // deletin
