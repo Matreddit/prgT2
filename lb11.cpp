@@ -1,11 +1,8 @@
 #include<iostream>
+#include<cstdlib>
+#include<ctime>
 
 using namespace std;
-/* v29 - 24 = 5
-   5. Написати програму з функціями, яка:
-а) у списку Р замінює перше входження списку G (якщо таке є) на списокQ;
-б) будує список Q – копію списку Р;
-в) додає до кінця списку Р інвертований список Р.   */
 
 struct DuoList
 {
@@ -52,22 +49,38 @@ void printList(DuoList *Head){
     cout << endl;
 }
 
+void deleteList(DuoList *& Head){
+    while (Head){
+        DuoList *q = Head;
+        Head = Head->next;
+        delete q;
+    }
+}
+/* v29 - 24 = 5
+   5. Написати програму з функціями, яка:
+а) у списку Р замінює перше входження списку G (якщо таке є) на списокQ;
+б) будує список Q – копію списку Р;
+в) додає до кінця списку Р інвертований список Р.   */
 
 int main(){
-    
-
-    DuoList *Head = NULL;
-    for(int i = 0; i < 20; i++)
-        addInBeg(Head, i);
+    srand(time(NULL));
 
 
-    printList(Head);
 
+    DuoList *P=NULL, *D=NULL, *Q=NULL;
 
-    for(int i = 0; i < 20; i++)
-        addInEnd(Head, i);
-
-    printList(Head);
+    for(int i = 0; i < 10; i++){
+        int j = rand() % 10;
+        addInEnd(P, j);
+    }
+    cout << "P list: ";
+    printList(P);
+    for(int i = 0; i < 10; i++){
+        int j = rand() % 10;
+        addInEnd(P, j);
+    }
+    cout << "P list: ";
+    printList(P);
 
 
     return 0;
