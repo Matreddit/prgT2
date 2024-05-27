@@ -1,88 +1,139 @@
-#include <iostream>
-#include <cstring>
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
 
 using namespace std;
 
+struct DuoList
+{
+    int inf;
+    DuoList *prev, *next;
+};
 
-///////////// V29 - 15 = 14
-    /*14. Підрахувати кількість відкритих та закритих фігурних дужок у рядку та вивести номери
-    їх позицій. Вилучити усі символи, які розташовані всередині дужок. (Вважати, що для
-    кожної відкритої дужки існує відповідна закрита, і між ними інших дужок немає). Якщо
-    дужок у рядку немає, то вивести про це інформацію.*/
+
+void addInEnd (DuoList *& Head, int inf){
+    DuoList *q = new DuoList;
+    q->inf = inf;
+    q->next = NULL;
+    if(Head){
+        DuoList *Tail = Head;
+        while(Tail->next)
+            Tail = Tail->next;
+        q->prev = Tail;
+        Tail->next = q;
+    } else{
+        q->prev = NULL;
+        Head = q;
+    }
+}
+
+void addInBeg(DuoList *& Head, int inf){
+    DuoList *q = new DuoList;
+    q->inf = inf;
+    q->prev = NULL;
+    if(!Head){
+        q->next = NULL;
+        Head = q;
+    } else{
+        q->next = Head;
+        Head->prev = q;
+        Head = q;
+    }
+}
+
+void printList(DuoList *Head){
+    while(Head){
+        cout << Head->inf << " ";
+        Head = Head->next;
+    }
+    cout << endl;
+}
+void printListRevers(DuoList*Head){
+    while(Head->next)
+        Head = Head->next;
+    while(Head){
+        cout << Head->inf << " ";
+        Head = Head->prev;
+    } cout << endl;
+}
+
+void deleteList(DuoList *& Head){
+    while (Head){
+        DuoList *q = Head;
+        Head = Head->next;
+        delete q;
+    }
+}
+
+// у списку Р замінює перше входження списку G (якщо таке є) на списокQ;
+void inPfindGwithQ(DuoList *& P, DuoList *G, DuoList *Q){
+    DuoList *qP = P;
+    DuoList *qG = G;
+    DuoList *qQ = Q;
+
+    bool isFound = false;
+    while(qP->next && !isFound){
+        qG = G;
+        while (qG->next && !isFound)
+        {
+            if(qP->inf == qG->inf)
+                isFound = true;
+            qG = qG->next;
+        }
+        qP = qP->next;
+    }
+    cout << qP->inf << endl;
+
+    DuoList *qDel = qP;
+    qP = qP->prev;
+    qDel->prev->next = qDel->next;
+    qDel->next->prev = qDel->prev;
+    delete qDel;
+
+    DuoList *qP_Next = qP->next;
+    qP->next = Q;
+    Q->prev = qP;
+    while(qQ->next)
+        qQ = qQ->next;
+    qQ->next = qP_Next;
+    qP_Next->prev = qQ;
+    
+}
+
+void makeCopyOfP(DuoList *& Q, DuoList *P){
+    
+}
+/* v29 - 24 = 5
+   5. Написати програму з функціями, яка:
+а) у списку Р замінює перше входження списку G (якщо таке є) на списокQ;
+б) будує список Q – копію списку Р;
+в) додає до кінця списку Р інвертований список Р.   */
 
 int main(){
-    
-    char str1[] = "hello{zxcv} zxc {zxc}zxc {}";
+    srand(time(NULL));
 
-    int *br1pos = new int[strlen(str1)];
-    int i11 = 0;
+    DuoList *P=NULL, *G=NULL, *Q=NULL;
 
-    int brkNum = 0;
-    bool shouldDelete = false;
-    for (int i = 0; str1[i] != '\0'; i++){
-        if (str1[i] == '{'){
-            brkNum++;
-            shouldDelete = true;
-            br1pos[i11] = i; i11++;
-
-        } else if (str1[i] == '}'){
-            shouldDelete = false;
-            br1pos[i11] = i; i11++;
-        }
-        if (shouldDelete && str1[i] != '{'){
-            str1[i] = '*';
-        }
+    for(int i = 0; i < 5; i++){
+        addInEnd(P, i);
+    }for(int i = 4; i >= 0; i--){
+        addInEnd(G, i);
+    }for(int i = 0; i < 5; i++){
+        addInEnd(Q, 9);
     }
-    
-    char * str1p = new char[strlen(str1)];
+    cout << "P, G, Q :\n";
+    printList(P);
+    printList(G);
+    printList(Q);
 
-    //cout << str1 << endl << endl;
+    cout << "\n5.a:\n";
+    inPfindGwithQ(P,G,Q);
 
-    int i1 = 0;
-    for (int i = 0; str1[i] != '\0'; i++){
-        if (str1[i] != '*'){
-            str1p[i1] = str1[i];
-            i1++;
-        }
-    }
+    cout << "P, G, Q :\n";
+    printList(P);
+    printList(G);
+    printList(Q);
 
-    cout << str1p << endl;
-    cout << "kilkist duszok: " << brkNum << endl;
-    cout << "duzhka vidkrylas v: ";
-    for (int i = 0; i < i11; i+=2){
-        cout << br1pos[i] << " ";
-    }
-    cout << "\nduzhka zakrylas v: ";
-    for (int i = 1; i < i11; i+=2){
-        cout << br1pos[i] << " ";
-    }
-    cout << "\n";
-    delete[] str1p;
-    delete[] br1pos;
-
-    //////////////////////////// 222222222222222222 ///////////////////////////////// 222222222222222222
-/*14. Дано масив, слів і в кожному слові від 1 до 8 малих українських літер. У кожному слові
-кожну букву повторити (наприклад, зі слова «ох» отримати слово «оохх»).   */
-    cout <<"\n\n";
-
-
-    char str2[] = "salo sho kum ljah hohol";
-
-    char * pstr2 = new char [strlen(str2)*2];
-    int i2 = 0;
-    for (int i = 0; str2[i] != '\0'; i++){
-        if (str2[i] != ' '){
-            pstr2[i2] = str2[i];
-            pstr2[i2+1] = str2[i];
-            i2+=2;
-        } else{
-            pstr2[i2] = ' ';
-            i2++;
-        }
-    }
-
-    cout << pstr2 << endl;
-    delete[] pstr2;
 
     return 0;
 }
