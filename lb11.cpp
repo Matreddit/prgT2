@@ -45,7 +45,8 @@ void printList(DuoList *Head){
     while(Head){
         cout << Head->inf << " ";
         Head = Head->next;
-    }cout << endl;
+    }
+    cout << endl;
 }
 void printListRevers(DuoList*Head){
     while(Head->next)
@@ -64,49 +65,44 @@ void deleteList(DuoList *& Head){
     }
 }
 
-void addListAfterPos(DuoList *&head1,DuoList*head2, int pos){
-    if(pos < 0){
-        DuoList *q1 = head1;
-        head1 = head2;
-        while(head2->next)
-            head2 = head2->next;
-        head2->next = q1;
-        q1->prev = head2;
-    } else{
-        int i = 0;
-        while(i != pos && head1){
-            i++;
-            head1=head1->next;
-        }
-        DuoList *q1 = head1->next;
-        head1->next = head2;
-        head2->prev = head1;
-        while(head2->next)
-            head2 = head2->next;
-        head2->next = q1;
-        if(q1)
-            q1->prev = head2;
-    }
-}
-
-void replaceGwithQ(DuoList *& P, DuoList *g, DuoList *q){
+// у списку Р замінює перше входження списку G (якщо таке є) на списокQ;
+void inPfindGwithQ(DuoList *& P, DuoList *G, DuoList *Q){
     DuoList *qP = P;
-    int pos = 0;
-    bool isDone = false;
-    while(qP->next && !isDone){
-        DuoList *qG = g;
-        while(qG && !isDone){
-            if(qP->inf == qG->inf){
-                addListAfterPos(P, q, pos);
-                isDone = true;
-            }
+    DuoList *qG = G;
+    DuoList *qQ = Q;
+
+    bool isFound = false;
+    while(qP->next && !isFound){
+        qG = G;
+        while (qG->next && !isFound)
+        {
+            if(qP->inf == qG->inf)
+                isFound = true;
             qG = qG->next;
         }
-        pos++;
         qP = qP->next;
     }
+    cout << qP->inf << endl;
 
-} 
+    DuoList *qDel = qP;
+    qP = qP->prev;
+    qDel->prev->next = qDel->next;
+    qDel->next->prev = qDel->prev;
+    delete qDel;
+
+    DuoList *qP_Next = qP->next;
+    qP->next = Q;
+    Q->prev = qP;
+    while(qQ->next)
+        qQ = qQ->next;
+    qQ->next = qP_Next;
+    qP_Next->prev = qQ;
+    
+}
+
+void makeCopyOfP(DuoList *& Q, DuoList *P){
+    
+}
 /* v29 - 24 = 5
    5. Написати програму з функціями, яка:
 а) у списку Р замінює перше входження списку G (якщо таке є) на списокQ;
@@ -116,32 +112,27 @@ void replaceGwithQ(DuoList *& P, DuoList *g, DuoList *q){
 int main(){
     srand(time(NULL));
 
-
-
     DuoList *P=NULL, *G=NULL, *Q=NULL;
 
-    for(int i = 0; i < 10; i++){
-        int j = rand() % 10;
-        addInEnd(P, j);
-    }cout << "P list: ";
+    for(int i = 0; i < 5; i++){
+        addInEnd(P, i);
+    }for(int i = 4; i >= 0; i--){
+        addInEnd(G, i);
+    }for(int i = 0; i < 5; i++){
+        addInEnd(Q, 9);
+    }
+    cout << "P, G, Q :\n";
     printList(P);
-
-    for(int i = 0; i < 10; i++){
-        int j = rand() % 10;
-        addInEnd(G, j);
-    }cout << "G list: ";
     printList(G);
-
-    for(int i = 0; i < 10; i++){
-        int j = rand() % 10;
-        addInEnd(Q, j);
-    }cout << "Q list: ";
     printList(Q);
 
+    cout << "\n5.a:\n";
+    inPfindGwithQ(P,G,Q);
 
-    replaceGwithQ(P,G,Q); // пофіксить пройоб Phead і вирізать зайвий вузол
+    cout << "P, G, Q :\n";
     printList(P);
-    printListRevers(P);
+    printList(G);
+    printList(Q);
 
 
     return 0;
