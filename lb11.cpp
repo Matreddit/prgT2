@@ -58,6 +58,7 @@ void printListRevers(DuoList*Head){
 }
 
 void deleteList(DuoList *& Head){
+    if(!Head) return;
     while (Head){
         DuoList *q = Head;
         Head = Head->next;
@@ -82,7 +83,7 @@ void inPfindGwithQ(DuoList *& P, DuoList *G, DuoList *Q){
         }
         qP = qP->next;
     }
-    cout << qP->inf << endl;
+    //cout << qP->inf << endl;
 
     DuoList *qDel = qP;
     qP = qP->prev;
@@ -101,6 +102,24 @@ void inPfindGwithQ(DuoList *& P, DuoList *G, DuoList *Q){
 }
 
 void makeCopyOfP(DuoList *& Q, DuoList *P){
+    int inf;
+    while(P){
+        inf = P->inf;
+        addInEnd(Q,inf);
+        P = P->next;
+    }
+}
+
+void addInvListInTail(DuoList * P){
+    DuoList *q = P;
+    while (q->next)    
+        q=q->next;
+    while(q->prev){
+        int inf = q->inf;
+        addInEnd(P,inf);
+        q = q->prev;
+    }
+
     
 }
 /* v29 - 24 = 5
@@ -129,10 +148,25 @@ int main(){
     cout << "\n5.a:\n";
     inPfindGwithQ(P,G,Q);
 
-    cout << "P, G, Q :\n";
+    cout << "P:\n";
     printList(P);
-    printList(G);
-    printList(Q);
+
+
+
+    DuoList *P2 = NULL, *Q2 = NULL;
+
+    // 2
+    cout << "\n\n\nb.\n";
+    for(int i = 0; i < 5; i++){
+        addInEnd(P2, i);
+    }
+    makeCopyOfP(Q2, P2);
+    printList(P2);
+    printList(Q2);
+
+    cout << "\nV\n";
+    addInvListInTail(P2);
+    printList(P2);
 
 
     return 0;
